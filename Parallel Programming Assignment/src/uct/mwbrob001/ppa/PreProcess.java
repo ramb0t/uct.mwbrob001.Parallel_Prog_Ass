@@ -1,3 +1,14 @@
+/* File: PreProcess.java
+ * CSC2002S Java Parallel assignment
+ * Author: MWBROB001
+ * Date : September 2012
+ * 
+ * Description:
+ *  PreProcess class to take parameters file, and then read the ant data files
+ *  followed by finding the corners & bining the data
+ * 
+ */
+
 package uct.mwbrob001.ppa;
 
 import java.io.BufferedReader;
@@ -75,7 +86,7 @@ public class PreProcess {
 			Scanner file_input = new Scanner (new FileInputStream(params_file));
 			
 			/* TODO
-			 * textfile input error handling
+			 * text file input error handling
 			 */
 			n = Integer.parseInt(file_input.nextLine()); 					// Get number of ant datafile;s
 			ant_datafiles_list = new String[n];         // Init datafile array
@@ -135,7 +146,8 @@ public class PreProcess {
 			    	
 			    	// try parse the input
 			    	try{			    		
-				    	int counter = Integer.parseInt((lineArr[0]));
+				    	// not used
+			    		//int counter = Integer.parseInt((lineArr[0]));
 				    	float x = Float.parseFloat((lineArr[1])); 
 				    	float y = Float.parseFloat((lineArr[2]));
 				    	
@@ -265,8 +277,9 @@ public class PreProcess {
 				    	lineArr = line.split(multiple_space_delim); 
 				    	
 				    	// try parse the input
-				    	try{			    		
-					    	int counter = Integer.parseInt((lineArr[0]));
+				    	try{
+				    		// also not used..
+					    	//int counter = Integer.parseInt((lineArr[0]));
 					    	float x = Float.parseFloat((lineArr[1])); 
 					    	float y = Float.parseFloat((lineArr[2]));
 					    	

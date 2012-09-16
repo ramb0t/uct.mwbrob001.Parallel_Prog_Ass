@@ -1,5 +1,5 @@
-/* File: main.java
- * CSC2002S Java Parrallel assignment
+/* File: Parallel_Prog_main.java
+ * CSC2002S Java Parallel assignment
  * Author: MWBROB001
  * Date : September 2012
  * 
@@ -17,6 +17,7 @@ public class Parallel_Prog_main {
 	
 	
 	private static String params_file = "data/params.txt";  // parameter file path
+	private static String queries_file = "data/queries.txt";  // queries file path
 	
 	// This will hold all the ant data.. 
 	private static int[][] antGrid = null; 
@@ -26,19 +27,30 @@ public class Parallel_Prog_main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// Step one, read parameter file
-		// comprising, n, data files to be read
-		// a list of the n files
-		// two ints, k & m comprising the data bin dims
 		
 		
-		
-		
+		// Create an instance of the PreProcess class, and process the params file
 		PreProcess preProcess = new PreProcess(params_file);
 		
+		// build the antGrid from the ant files 
 		System.out.println("binning data, this could take a while... ");
 		antGrid = preProcess.doBinning(antGrid);
-		print();
+		
+		// prints the grid out if debugging is enabled ...
+		if(DEBUG){   
+			print();
+		}
+		
+		
+		
+		// Version1: Simple and Sequential
+		//*********************************************************************
+		
+		// create an instance of the class
+		
+		
+		
+		
 		
 	}
 	
