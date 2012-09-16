@@ -10,6 +10,7 @@ import static uct.mwbrob001.ppa.Parallel_Prog_main.DEBUG; 				// get the DEBUG c
 
 
 
+
 /**
  * What needs to be done here? 
  * 
@@ -19,9 +20,18 @@ import static uct.mwbrob001.ppa.Parallel_Prog_main.DEBUG; 				// get the DEBUG c
 public class PreProcess {
 	
 	//Global class variables
+	//**********************
 	private int n = 0; 					  // number of ant datafiles
 	private String[] ant_datafiles_list;  // String array to store ant datafile names
 	private int k,m = 0; 			      // x,y bin sizes
+	
+	// variables for storing the corners
+	float minX = 0, maxX = 0;
+	float minY = 0, maxY = 0;
+	
+	// vars for dealing with the offset in negative matricies
+	int xOffset = 0;
+	int yOffset = 0;
 	
 	//Timer class for timing stuff yo.. 
 	Timer execTime = new Timer();
@@ -43,9 +53,12 @@ public class PreProcess {
 		
 		
 		//Read the file into global class parameters
+		System.out.println("Reading parameters file.. ");
 		readParams(params_file);
 		
-		readAntFiles();
+		// get data from the ant files
+		System.out.println("Searching for corners, this could take a while..");
+		findCorners();
 		
 				
 		
@@ -84,68 +97,235 @@ public class PreProcess {
 		}
 		
 	}
-
+	
 	/**
-	 * Reads the ant location files, detects corners, bins data etc.
+	 * reads the files and finds the min and max values for corners
+	 * stores these in the global class variables
 	 */
-	private void readAntFiles(){
-		// whats the plan here?
-		// check corners then bin data? 
-		// else bin and expand as bigger corers are found?
-		// what data structure to use? arraylist maybe? 
-		
-		
-		BufferedReader br = null;
+	private void findCorners(){
+		/**
+		 * Step 1:
+		 * read all the files finding the corners
+		 */
+		BufferedReader br = null; // init the reader var
+		// try read the input files catching read errors
 	    try {
-	    	
-	    	float minX = 0, maxX = 0;
-	    	float minY = 0, maxY = 0;
+	    	    	
+	    	// vars for dealing with the input strings
 	    	String line;
 	    	String[] lineArr;
+	    	
 	    	
 	    	if(DEBUG){	execTime.start_timer();	} // starts timing the following code.
 	    	
 	    	
-	    	br = new BufferedReader(new FileReader("data/" + ant_datafiles_list[1]));
-	    	
-	    	line = br.readLine();
-	    	
-	    	while(line != null){
-		    	lineArr = line.split(" ");
+	    	for (String path : ant_datafiles_list){ // for each datafile in the datafile list
+	    		
+		    	br = new BufferedReader(new FileReader("data/" + path)); // open a buffered reader of the file
 		    	
-		    	float x = Float.parseFloat((lineArr[1])); 
-		    	float y = Float.parseFloat((lineArr[2]));
+		    	line = br.readLine(); // get a line
 		    	
-		    	if (x > maxX){
-		    		maxX = x;
-		    	} else if(x < minX){
-		    		minX = x;
+		    	while(line != null){  // loop until end of file
+		    		
+		    		// Deal with multiple space delimiters:
+			    	String multiple_space_delim = "[ ]+";
+		    		
+			    	// Split the ant input line up
+			    	lineArr = line.split(multiple_space_delim); 
+			    	
+			    	// try parse the input
+			    	try{			    		
+				    	int counter = Integer.parseInt((lineArr[0]));
+				    	float x = Float.parseFloat((lineArr[1])); 
+				    	float y = Float.parseFloat((lineArr[2]));
+				    	
+				    	// corner finding logic. 
+				    	if (x > maxX){
+				    		maxX = x;
+				    	} else if(x < minX){
+				    		minX = x;
+				    	}
+				    	
+				    	if (y > maxY){
+				    		maxY = y;
+				    	} else if(y < minY){
+				    		minY = y;
+				    	}
+			    	
+			    	} catch(Exception ex){ // catching all errors
+			    		System.out.println("File parsing Error!! " +
+			    				"Something went wrong when trying to parse the data," +
+			    				" please check your file format");
+						System.out.println(ex.toString());
+			            System.exit(1);
+			    	}
+			    	
+			    	
+			    	line = br.readLine();
 		    	}
 		    	
-		    	if (y > maxY){
-		    		maxY = y;
-		    	} else if(y < minY){
-		    		minY = y;
-		    	}
-		    	
-		    	line = br.readLine();
+		        br.close();  // close the current ant datafile
+		        
 	    	}
 	    	
-	        br.close();  // close the current ant datafile
-	        
-	        
-	        
-	        if(DEBUG){	execTime.finish_timer();   	} // displays the time the code took to execute
-	        
-	       
-	        
-	        System.out.println(minX + ", " + maxX + ", " + minY + ", " + maxY );
+	    	if(DEBUG){ // displays the time the code took to execute
+	    		System.out.println("Corners: " + minX + ", " + maxX + ", " + minY + ", " + maxY );
+	    		execTime.finish_timer();
+	    	}
+	    	
 	    } catch (IOException e) {
 	    	System.out.println("File IO Error!! Cannot open, please check file names.");
 			System.out.println(e.toString());
             System.exit(1);
 	    }
-	    
+	    	
+	}
+
+	/**
+	 * Takes the 2d int array, reads ant dat files and bin's data accordingly
+	 * @param antGrid
+	 * @return newAntGrid
+	 */
+	public int[][] doBinning(int[][]antGrid){
+
+		 
+    	
+    	/**
+    	 * Step 2: 
+    	 * Setup the array using corners and bin sizes
+    	 * we need to work out the range of x and y vals
+    	 * and the div by the bin sizes
+    	 * to find the array size
+    	 */
+		
+		try{
+		
+		
+			if(DEBUG){	execTime.start_timer();	} // starts timing the following code.
+			
+			
+	    	
+	    	// get x,y ranges
+	    	float xRange = maxX - minX; 
+	    	float yRange = maxY - minY;
+	    	
+	    	// round the ranges up to the nearest whole int
+	    	xRange = (float) Math.ceil(xRange);
+	    	yRange = (float) Math.ceil(yRange);
+	    	
+	    	// div by the bin sizes to get final array block sizes
+	    	int xBloc = (int) Math.ceil((xRange/k));
+	    	int yBloc = (int) Math.ceil((yRange/m));
+	    	
+	    	// init the ant array.
+	    	antGrid = new int[xBloc+1][yBloc+1];
+	    	
+	    	// deal with offsets in the case of negative grid values
+	    	if (minX < 0){ // x Offset
+	    		xOffset = Math.abs((int) Math.floor(minX));
+	    	}
+	    	if (minY < 0){ // y Offset
+	    		yOffset = Math.abs((int) Math.floor(minY));
+	    	}
+	    	
+	    	if(DEBUG){
+	    		System.out.println("Ranges: " + xRange + " " + yRange);
+	    		System.out.println("k, m :" + k + " " + m);
+	    		System.out.println("array size: " + xBloc + " " + yBloc);
+	    	}
+	    	
+	    	
+	    	
+	    	/**
+	    	 * Step 3: bin the data
+	    	 */
+	    	
+	    	// reading data from files
+	    	try{
+	    		
+	    		BufferedReader br = null; // init the reader var
+	    		
+	    		// vars for dealing with the input strings
+		    	String line;
+		    	String[] lineArr;
+	
+		    	
+		    	for (String path : ant_datafiles_list){ // for each datafile in the datafile list
+		    		
+			    	br = new BufferedReader(new FileReader("data/" + path)); // open a buffered reader
+			    	
+			    	line = br.readLine(); // get a line
+			    	
+			    	while(line != null){ // loop until end of file
+			    		
+			    		// Deal with multiple space delimiters:
+				    	String multiple_space_delim = "[ ]+";
+			    		
+				    	// Split the ant input line up
+				    	lineArr = line.split(multiple_space_delim); 
+				    	
+				    	// try parse the input
+				    	try{			    		
+					    	int counter = Integer.parseInt((lineArr[0]));
+					    	float x = Float.parseFloat((lineArr[1])); 
+					    	float y = Float.parseFloat((lineArr[2]));
+					    	
+					    	// binning logic
+					    	// take datapoint / (xRange/k) gives the bin it's in? 
+					    	
+					    	
+					    	double xbin = (x/k);
+					    	double ybin = (y/m);
+					    	
+					        // next test if it falls exactly between two (or 4) bins.
+					    	
+					    	antGrid[xOffset + (int) Math.ceil(xbin)][yOffset + (int) Math.ceil(ybin)]++;
+					    	
+				    	
+				    	} catch(Exception ex){ // catching all errors
+				    		System.out.println("File parsing Error!! " +
+				    				"Something went wrong when trying to parse the data," +
+				    				" please check your file format");
+							System.out.println(ex.toString());
+				            System.exit(1);
+				    	}
+				    	
+				    	
+				    	line = br.readLine();
+			    	} // end while
+			    	
+			        br.close();  // close the current ant datafile
+			        
+		    	} // end for each
+	    		
+	    		
+	    	} catch (IOException e) { // catch file reading errors
+		    	System.out.println("File IO Error!! Cannot open, please check file names.");
+				System.out.println(e.toString());
+	            System.exit(1);
+		    }
+	    	
+	        
+	        
+	        
+	        if(DEBUG){	
+	        	execTime.finish_timer();
+	        	System.out.println("To bin the data.");
+	        	} // displays the time the code took to execute
+	        
+		       
+		        
+		    
+	        
+		} catch(Exception ex){ // catches anything that may have gone wrong while building the array.. 
+			System.out.println("Something went wrong while trying to bin the data... ");
+			System.out.println(ex.toString());
+            System.exit(1);
+		}
+		
+		
+		// send the filled antGrid back :)     
+        return antGrid;
 
 		
 	}

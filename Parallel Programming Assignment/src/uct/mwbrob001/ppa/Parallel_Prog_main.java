@@ -18,6 +18,9 @@ public class Parallel_Prog_main {
 	
 	private static String params_file = "data/params.txt";  // parameter file path
 	
+	// This will hold all the ant data.. 
+	private static int[][] antGrid = null; 
+	
 	
 	/**
 	 * @param args
@@ -33,8 +36,37 @@ public class Parallel_Prog_main {
 		
 		PreProcess preProcess = new PreProcess(params_file);
 		
+		System.out.println("binning data, this could take a while... ");
+		antGrid = preProcess.doBinning(antGrid);
+		print();
 		
-		
+	}
+	
+	private static void print(){
+		for (int[] a : antGrid){ // array of coloums
+			for(int b : a){ // elements in coloumn
+				System.out.print(b);
+			}
+			System.out.println();
+		}
+	}
+	
+	
+	// getters and setters for antGrid
+	// used to pass the grid bettween classes
+	/**
+	 * antGrid Getter
+	 * @return
+	 */
+	public int[][] getAntGrid(){
+		return antGrid;
+	}
+	/**
+	 * antGrid Setter
+	 * @param newAntGrid
+	 */
+	public void setAntGrid(int[][] newAntGrid){
+		antGrid = newAntGrid;
 	}
 
 }
