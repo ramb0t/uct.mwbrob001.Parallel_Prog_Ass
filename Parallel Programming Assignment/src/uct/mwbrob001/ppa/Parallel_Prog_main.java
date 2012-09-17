@@ -14,7 +14,7 @@ package uct.mwbrob001.ppa;
 public class Parallel_Prog_main {
 
 	public static final boolean DEBUG = true; // DEBUG define. .
-	public static final int DEBUG_LEVEL = 1; // DEBUG_LEVEL define gives me more debug flexablility . .
+	public static final int DEBUG_LEVEL = 0; // DEBUG_LEVEL define gives me more debug flexablility . .
 	
 	
 	private static String params_file = "data/params.txt";  // parameter file path

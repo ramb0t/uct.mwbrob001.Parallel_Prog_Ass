@@ -22,7 +22,7 @@ public class Results {
 	
 	// toString override for printing
 	public String toString(){
-		return dpCount + " " + dpPercentage;
+		return dpCount + " " + dpPercentage + "%";
 	}
 
 	

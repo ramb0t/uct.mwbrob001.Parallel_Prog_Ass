@@ -349,8 +349,8 @@ public class PreProcess {
 		
     	
 		// send the filled antGrid back :)     
-        AntGrid a = new AntGrid(tempAntGrid, count, k, m, xOffset, yOffset);
-        return a;
+        return new AntGrid(tempAntGrid, count, k, m, xOffset, yOffset);
+       
 		
         
         
