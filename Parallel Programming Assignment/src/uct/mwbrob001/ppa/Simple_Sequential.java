@@ -11,6 +11,9 @@
 
 package uct.mwbrob001.ppa;
 
+// what do I want to pass here? 
+// the ant grid - easy
+// and the query, what form? 
 public class Simple_Sequential {
 	
 	

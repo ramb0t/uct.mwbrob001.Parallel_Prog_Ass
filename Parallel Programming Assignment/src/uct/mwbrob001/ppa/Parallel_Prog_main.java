@@ -14,6 +14,7 @@ package uct.mwbrob001.ppa;
 public class Parallel_Prog_main {
 
 	public static final boolean DEBUG = true; // DEBUG define. .
+	public static final int DEBUG_LEVEL = 0; // DEBUG_LEVEL define gives me more debug flexablility . .
 	
 	
 	private static String params_file = "data/params.txt";  // parameter file path
@@ -26,6 +27,7 @@ public class Parallel_Prog_main {
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		
 		
@@ -37,22 +39,31 @@ public class Parallel_Prog_main {
 		antGrid = preProcess.doBinning(antGrid);
 		
 		// prints the grid out if debugging is enabled ...
-		if(DEBUG){   
+		if(DEBUG && DEBUG_LEVEL == 1){   
 			print();
 		}
 		
+		
+		// Get the query/s
+		//*********************************************************************
+		QueryHandler QH = new QueryHandler(); 
+		
+		Query query = QH.getQueryKeyboard();
 		
 		
 		// Version1: Simple and Sequential
 		//*********************************************************************
 		
 		// create an instance of the class
+		Simple_Sequential test1 = new Simple_Sequential();
+		
 		
 		
 		
 		
 		
 	}
+	
 	
 	private static void print(){
 		for (int[] a : antGrid){ // array of coloums
