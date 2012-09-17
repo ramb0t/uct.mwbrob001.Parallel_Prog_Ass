@@ -65,8 +65,20 @@ public class Parallel_Prog_main {
 		Results t1Result = test1.runTest(antGrid, query);
 		System.out.println("The results are: " + t1Result.toString());
 		
+		// Version2: Simple and Parallel
+		//*********************************************************************
 		
+		// create an instance of the class
+		Simple_Parallel test2 = new Simple_Parallel();
 		
+		// run the test
+		System.out.println();
+		System.out.println("Running test 2, Simple and Parallel...");
+		System.out.println();
+		
+		Results t2Result = test2.runTest(antGrid, query);
+		System.out.println("The results are: " + t2Result.toString());
+
 		
 		
 		

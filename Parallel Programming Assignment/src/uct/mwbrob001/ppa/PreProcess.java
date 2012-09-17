@@ -11,13 +11,15 @@
 
 package uct.mwbrob001.ppa;
 
+import static uct.mwbrob001.ppa.Parallel_Prog_main.DEBUG;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
-
-import static uct.mwbrob001.ppa.Parallel_Prog_main.DEBUG; 				// get the DEBUG constant from main
+// get the DEBUG constant from main
 
 
 
@@ -35,6 +37,9 @@ public class PreProcess {
 	private int n = 0; 					  // number of ant datafiles
 	private String[] ant_datafiles_list;  // String array to store ant datafile names
 	private int k,m = 0; 			      // x,y bin sizes
+	
+	//Arraylist for reading the file into and then binning
+	ArrayList<String> dataPoints = new ArrayList<String>();
 	
 	// variables for storing the corners
 	float minX = 0, maxX = 0;
@@ -85,19 +90,22 @@ public class PreProcess {
 		try{
 			Scanner file_input = new Scanner (new FileInputStream(params_file));
 			
-			/* TODO
-			 * text file input error handling
-			 */
-			n = Integer.parseInt(file_input.nextLine()); 					// Get number of ant datafile;s
-			ant_datafiles_list = new String[n];         // Init datafile array
-			
-			
-			for(int i = 0 ; i<n ; i++){ 
-				ant_datafiles_list[i] = file_input.nextLine();  // Grab the datafile names
+			try{
+				n = Integer.parseInt(file_input.nextLine()); 					// Get number of ant datafile;s
+				ant_datafiles_list = new String[n];         // Init datafile array
+				
+				
+				for(int i = 0 ; i<n ; i++){ 
+					ant_datafiles_list[i] = file_input.nextLine();  // Grab the datafile names
+				}
+				
+				k = Integer.parseInt(file_input.next()); 
+				m = Integer.parseInt(file_input.next());   // Get the bin sizes
+			} catch(Exception ex){
+				System.out.println("Something went wrong when trying to parse the parameters file!");
+				System.out.println(ex.toString());
+				System.exit(1);
 			}
-			
-			k = Integer.parseInt(file_input.next()); 
-			m = Integer.parseInt(file_input.next());   // Get the bin sizes
 			
 			file_input.close(); 	   // Finally close the stream.. 
 			
@@ -116,7 +124,7 @@ public class PreProcess {
 	private void findCorners(){
 		/**
 		 * Step 1:
-		 * read all the files finding the corners
+		 * read all the files finding the corners, and read the file into an arraylist for faster binning 
 		 */
 		BufferedReader br = null; // init the reader var
 		// try read the input files catching read errors
@@ -137,6 +145,9 @@ public class PreProcess {
 		    	line = br.readLine(); // get a line
 		    	
 		    	while(line != null){  // loop until end of file
+		    		
+		    		// add the line to the datapoint arraylist
+		    		dataPoints.add(line);
 		    		
 		    		// Deal with multiple space delimiters:
 			    	String multiple_space_delim = "[ ]+";
@@ -194,7 +205,7 @@ public class PreProcess {
 	}
 
 	/**
-	 * Takes the 2d int array, reads ant dat files and bin's data accordingly
+	 * Takes the 2d int array, reads datapoints from the datapoints arraylist and bin's data accordingly
 	 * @param antGrid
 	 * @return newAntGrid
 	 */
@@ -255,80 +266,55 @@ public class PreProcess {
 	    	 * Step 3: bin the data
 	    	 */
 	    	
-	    	// reading data from files
-	    	try{
 	    		
-	    		BufferedReader br = null; // init the reader var
-	    		
-	    		// vars for dealing with the input strings
-		    	String line;
-		    	String[] lineArr;
-	
-		    	
-		    	for (String path : ant_datafiles_list){ // for each datafile in the datafile list
-		    		
-			    	br = new BufferedReader(new FileReader("data/" + path)); // open a buffered reader
-			    	
-			    	line = br.readLine(); // get a line
-			    	
-			    	while(line != null){ // loop until end of file
-			    		
-			    		// Deal with multiple space delimiters:
-				    	String multiple_space_delim = "[ ]+";
-			    		
-				    	// Split the ant input line up
-				    	lineArr = line.split(multiple_space_delim); 
-				    	
-				    	// try parse the input
-				    	try{
-				    		// also not used..
-					    	//int counter = Integer.parseInt((lineArr[0]));
-					    	float x = Float.parseFloat((lineArr[1])); 
-					    	float y = Float.parseFloat((lineArr[2]));
-					    	
-					    	// binning logic
-					    	// take datapoint / (xRange/k) gives the bin it's in? 
-					    	
-					    	
-					    	double xbin = (x/k);
-					    	double ybin = (y/m);
-					    	
-					        // next test if it falls exactly between two (or 4) bins.
-					    	
-					    	tempAntGrid[xOffset + (int) Math.ceil(xbin)][yOffset + (int) Math.ceil(ybin)]++;
-					    	count++;
-					    	
-				    	
-				    	} catch(Exception ex){ // catching all errors
-				    		System.out.println("File parsing Error!! " +
-				    				"Something went wrong when trying to parse the data," +
-				    				" please check your file format");
-							System.out.println(ex.toString());
-				            System.exit(1);
-				    	}
-				    	
-				    	
-				    	line = br.readLine();
-			    	} // end while
-			    	
-			        br.close();  // close the current ant datafile
-			        
-		    	} // end for each
-		    	
-		 	
-		    	
-		       
-		        
-		        
-		        
-	    		
-	    	} catch (IOException e) { // catch file reading errors
-		    	System.out.println("File IO Error!! Cannot open, please check file names.");
-				System.out.println(e.toString());
-	            System.exit(1);
-		    }
+    		// vars for dealing with the input strings
+	    	String[] lineArr;
+
 	    	
-	        
+	    	for (String line : dataPoints){ // for each element in the arraylist
+		    		
+	    		// Deal with multiple space delimiters:
+		    	String multiple_space_delim = "[ ]+";
+	    		
+		    	// Split the ant input line up
+		    	lineArr = line.split(multiple_space_delim); 
+		    	
+		    	// try parse the input
+		    	try{
+		    		// also not used..
+			    	//int counter = Integer.parseInt((lineArr[0]));
+			    	float x = Float.parseFloat((lineArr[1])); 
+			    	float y = Float.parseFloat((lineArr[2]));
+			    	
+			    	// binning logic
+			    	// take datapoint / (xRange/k) gives the bin it's in? 
+			    	
+			    	
+			    	double xbin = (x/k);
+			    	double ybin = (y/m);
+			    	
+			        // next test if it falls exactly between two (or 4) bins.
+			    	
+			    	tempAntGrid[xOffset + (int) Math.ceil(xbin)][yOffset + (int) Math.ceil(ybin)]++;
+			    	count++;
+			    	
+		    	
+		    	} catch(Exception ex){ // catching all errors
+		    		System.out.println("File parsing Error!! " +
+		    				"Something went wrong when trying to parse the data," +
+		    				" please check your file format");
+					System.out.println(ex.toString());
+		            System.exit(1);
+		    	}
+		        
+	    	} // end for each
+	    	
+	    	// clean up, destroy the arraylist
+	    	dataPoints.clear();
+	    	
+	 	
+		    	
+
 	        
 	        
 	        if(DEBUG){	
