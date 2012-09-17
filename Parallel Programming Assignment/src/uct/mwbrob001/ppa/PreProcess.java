@@ -198,7 +198,7 @@ public class PreProcess {
 	 * @param antGrid
 	 * @return newAntGrid
 	 */
-	public int[][] doBinning(int[][]antGrid){
+	public AntGrid doBinning(){
 
 		 
     	
@@ -209,6 +209,10 @@ public class PreProcess {
     	 * and the div by the bin sizes
     	 * to find the array size
     	 */
+		
+    	// init the temp ant array to work with now; and the counter to hold the datapoints
+    	int[][] tempAntGrid = null;
+    	int count = 0;
 		
 		try{
 		
@@ -228,9 +232,8 @@ public class PreProcess {
 	    	// div by the bin sizes to get final array block sizes
 	    	int xBloc = (int) Math.ceil((xRange/k));
 	    	int yBloc = (int) Math.ceil((yRange/m));
-	    	
-	    	// init the ant array.
-	    	antGrid = new int[xBloc+1][yBloc+1];
+	    
+	    	tempAntGrid = new int[xBloc+1][yBloc+1];
 	    	
 	    	// deal with offsets in the case of negative grid values
 	    	if (minX < 0){ // x Offset
@@ -292,7 +295,8 @@ public class PreProcess {
 					    	
 					        // next test if it falls exactly between two (or 4) bins.
 					    	
-					    	antGrid[xOffset + (int) Math.ceil(xbin)][yOffset + (int) Math.ceil(ybin)]++;
+					    	tempAntGrid[xOffset + (int) Math.ceil(xbin)][yOffset + (int) Math.ceil(ybin)]++;
+					    	count++;
 					    	
 				    	
 				    	} catch(Exception ex){ // catching all errors
@@ -310,7 +314,13 @@ public class PreProcess {
 			        br.close();  // close the current ant datafile
 			        
 		    	} // end for each
-	    		
+		    	
+		 	
+		    	
+		       
+		        
+		        
+		        
 	    		
 	    	} catch (IOException e) { // catch file reading errors
 		    	System.out.println("File IO Error!! Cannot open, please check file names.");
@@ -337,8 +347,15 @@ public class PreProcess {
 		}
 		
 		
+    	
 		// send the filled antGrid back :)     
-        return antGrid;
+        AntGrid a = new AntGrid(tempAntGrid, count, k, m, xOffset, yOffset);
+        return a;
+		
+        
+        
+		
+
 
 		
 	}

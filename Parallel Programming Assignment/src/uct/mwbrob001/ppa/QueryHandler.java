@@ -19,7 +19,11 @@ public class QueryHandler {
 		int xMin=0, xMax=0;
 		int yMin=0, yMax=0;
 		
+		
+		
 		// Get the first line
+		System.out.println();
+		System.out.println("Please enter the query: ");
 		line = input.nextLine();
 
     	// do some logic on the values. 
@@ -54,9 +58,6 @@ public class QueryHandler {
 			    		xMax = Integer.parseInt(lineArr[2]);
 			    		yMax = Integer.parseInt(lineArr[3]);
 			    		
-			    		// conversion should be done, set flag
-			    		flag = true;
-			    		
 			    		
 			    	} catch(Exception ex){
 			    		// something went wrong during conversion.. 
@@ -67,9 +68,12 @@ public class QueryHandler {
 			    	
 			    	// final logic
 			    	if (xMax < xMin | yMax < yMin){
-			    		System.out.println("Cant read your values! please make sure they are 4 integers.. ");
+			    		System.out.println("values out of range, please make sure xMax > xMin etc. ");
 			    		// get another line from the keyboard
 			    		line = input.nextLine();
+			    	} else{
+			    		// conversion should be done, set flag
+			    		flag = true;
 			    	}
 		    	
 			} catch(Exception ex){ // outer try catch.. 

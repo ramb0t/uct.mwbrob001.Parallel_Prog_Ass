@@ -14,20 +14,19 @@ package uct.mwbrob001.ppa;
 public class Parallel_Prog_main {
 
 	public static final boolean DEBUG = true; // DEBUG define. .
-	public static final int DEBUG_LEVEL = 0; // DEBUG_LEVEL define gives me more debug flexablility . .
+	public static final int DEBUG_LEVEL = 1; // DEBUG_LEVEL define gives me more debug flexablility . .
 	
 	
 	private static String params_file = "data/params.txt";  // parameter file path
-	private static String queries_file = "data/queries.txt";  // queries file path
+	//private static String queries_file = "data/queries.txt";  // queries file path
 	
 	// This will hold all the ant data.. 
-	private static int[][] antGrid = null; 
+	private static AntGrid antGrid = null; 
 	
 	
 	/**
 	 * @param args
 	 */
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		
 		
@@ -36,11 +35,11 @@ public class Parallel_Prog_main {
 		
 		// build the antGrid from the ant files 
 		System.out.println("binning data, this could take a while... ");
-		antGrid = preProcess.doBinning(antGrid);
+		antGrid = preProcess.doBinning();
 		
 		// prints the grid out if debugging is enabled ...
 		if(DEBUG && DEBUG_LEVEL == 1){   
-			print();
+			antGrid.print();
 		}
 		
 		
@@ -51,12 +50,25 @@ public class Parallel_Prog_main {
 		Query query = QH.getQueryKeyboard();
 		
 		
+		
 		// Version1: Simple and Sequential
 		//*********************************************************************
 		
 		// create an instance of the class
 		Simple_Sequential test1 = new Simple_Sequential();
 		
+		// run the test
+		System.out.println();
+		System.out.println("Running test 1, Simple and Sequential...");
+		System.out.println();
+		
+		Results t1Result = test1.runTest(antGrid, query);
+		System.out.println("The results are: " + t1Result.toString());
+		
+		
+		
+		
+		
 		
 		
 		
@@ -65,31 +77,5 @@ public class Parallel_Prog_main {
 	}
 	
 	
-	private static void print(){
-		for (int[] a : antGrid){ // array of coloums
-			for(int b : a){ // elements in coloumn
-				System.out.print(b);
-			}
-			System.out.println();
-		}
-	}
 	
-	
-	// getters and setters for antGrid
-	// used to pass the grid bettween classes
-	/**
-	 * antGrid Getter
-	 * @return
-	 */
-	public int[][] getAntGrid(){
-		return antGrid;
-	}
-	/**
-	 * antGrid Setter
-	 * @param newAntGrid
-	 */
-	public void setAntGrid(int[][] newAntGrid){
-		antGrid = newAntGrid;
-	}
-
 }
