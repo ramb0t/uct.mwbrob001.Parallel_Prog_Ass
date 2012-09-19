@@ -179,6 +179,7 @@ public class PreProcess {
 			    		System.out.println("File parsing Error!! " +
 			    				"Something went wrong when trying to parse the data," +
 			    				" please check your file format");
+			    		System.out.println("In file: " + path);
 						System.out.println(ex.toString());
 			            System.exit(1);
 			    	}

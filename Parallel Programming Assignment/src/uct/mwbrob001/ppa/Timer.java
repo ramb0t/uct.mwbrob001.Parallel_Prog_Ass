@@ -7,10 +7,23 @@ package uct.mwbrob001.ppa;
 
 
 public class Timer {
+	
+	long nsstartTime;
+	long nsendTime;
+	
 	long startTime;
 	long endTime;
 	
 	public Timer(){
+	}
+	
+	public void start_ns_timer(){ // starts nano second timer 
+		nsstartTime = System.nanoTime();
+	}
+	
+	public void finish_ns_timer(){ // completes the nano second timer
+		nsendTime = System.nanoTime();
+		System.out.println("Execution time: " + (nsendTime - nsstartTime) + "ns");
 	}
 	
 	public void start_timer(){ // starts the timer 

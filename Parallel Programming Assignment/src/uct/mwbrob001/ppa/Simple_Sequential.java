@@ -30,7 +30,7 @@ public class Simple_Sequential {
 	public Results runTest(AntGrid antGrid, Query query){
 		// first up, going to need timer to see how long this takes
 		Timer tTimer = new Timer();
-		tTimer.start_timer();
+		tTimer.start_ns_timer();
 		
 		// fetch the ant grid
 		int[][] aGrid = antGrid.getAntArr();
@@ -82,7 +82,7 @@ public class Simple_Sequential {
 		}
 		
 		// finish the timer
-		tTimer.finish_timer();
+		tTimer.finish_ns_timer();
 		
 		int numdp = antGrid.getCount();
 		double dpPercentage = ((dpCount*100)/numdp);
