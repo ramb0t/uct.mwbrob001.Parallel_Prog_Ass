@@ -20,6 +20,10 @@ public class Query {
 		this.setyMin(yMin);
 		this.setyMax(yMax);
 	}
+	
+	public String toString(){
+		return xMin + " " + yMin + " " + xMax + " " + yMax;
+	}
 
 	public int getxMin() {
 		return xMin;

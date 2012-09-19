@@ -16,9 +16,14 @@ public class Parallel_Prog_main {
 	public static final boolean DEBUG = true; // DEBUG define. .
 	public static final int DEBUG_LEVEL = 0; // DEBUG_LEVEL define gives me more debug flexablility . .
 	
+	// sets where the Query should come from
+	//public static final String QUERY_SOURCE= "KEYBOARD"; 
+	public static final String QUERY_SOURCE = "FILE"; 
 	
-	private static String params_file = "data/params.txt";  // parameter file path
-	//private static String queries_file = "data/queries.txt";  // queries file path
+	
+	// file path defines
+	private static final String params_file = "data/params.txt";  // parameter file path
+	public static final String QUERY_FILE = "data/queries.txt";  // queries file path
 	
 	// This will hold all the ant data.. 
 	private static AntGrid antGrid = null; 
@@ -46,41 +51,50 @@ public class Parallel_Prog_main {
 		// Get the query/s
 		//*********************************************************************
 		QueryHandler QH = new QueryHandler(); 
+		Query query = QH.getQuery();
 		
-		Query query = QH.getQueryKeyboard();
+		while(query != null){ // loop until queries done.. 
+			
+			
+			System.out.println();
+			System.out.println("************************************************");
+			System.out.println("************************************************");
+			System.out.println("Testing Query: " + query.toString());
 		
 		
-		
-		// Version1: Simple and Sequential
-		//*********************************************************************
-		
-		// create an instance of the class
-		Simple_Sequential test1 = new Simple_Sequential();
-		
-		// run the test
-		System.out.println();
-		System.out.println("Running test 1, Simple and Sequential...");
-		System.out.println();
-		
-		Results t1Result = test1.runTest(antGrid, query);
-		System.out.println("The results are: " + t1Result.toString());
-		
-		// Version2: Simple and Parallel
-		//*********************************************************************
-		
-		// create an instance of the class
-		Simple_Parallel test2 = new Simple_Parallel();
-		
-		// run the test
-		System.out.println();
-		System.out.println("Running test 2, Simple and Parallel...");
-		System.out.println();
-		
-		Results t2Result = test2.runTest(antGrid, query);
-		System.out.println("The results are: " + t2Result.toString());
+			// Version1: Simple and Sequential
+			//*********************************************************************
+			
+			// create an instance of the class
+			Simple_Sequential test1 = new Simple_Sequential();
+			
+			// run the test
+			System.out.println();
+			System.out.println("************************************************");
+			System.out.println("Running test 1, Simple and Sequential...");
+			System.out.println();
+			
+			Results t1Result = test1.runTest(antGrid, query);
+			System.out.println("The results are: " + t1Result.toString());
+			
+			// Version2: Simple and Parallel
+			//*********************************************************************
+			
+			// create an instance of the class
+			Simple_Parallel test2 = new Simple_Parallel();
+			
+			// run the test
+			System.out.println();
+			System.out.println("************************************************");
+			System.out.println("Running test 2, Simple and Parallel...");
+			System.out.println();
+			
+			//Results t2Result = test2.runTest(antGrid, query);
+			//System.out.println("The results are: " + t2Result.toString());
 
-		
-		
+			// gets the next query
+			query = QH.getQuery();
+		} // end query loop
 		
 		
 		
