@@ -89,8 +89,8 @@ public class Parallel_Prog_main {
 			System.out.println("Running test 2, Simple and Parallel...");
 			System.out.println();
 			
-			//Results t2Result = test2.runTest(antGrid, query);
-			//System.out.println("The results are: " + t2Result.toString());
+			Results t2Result = test2.runTest(antGrid, query);
+			System.out.println("The results are: " + t2Result.toString());
 
 			// gets the next query
 			query = QH.getQuery();

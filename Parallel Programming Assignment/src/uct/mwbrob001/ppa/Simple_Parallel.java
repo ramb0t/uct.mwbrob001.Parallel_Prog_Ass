@@ -24,8 +24,15 @@ public class Simple_Parallel {
 	
 	public Results runTest(AntGrid antGrid, Query query){
 		
+		
+		
 		// fetch the ant grid
 		int[][] aGrid = antGrid.getAntArr();
+		
+
+		Timer t2Timer = new Timer();
+		t2Timer.start_ns_timer();
+
 		
 		// get the query co-ords
 		int xMin = query.getxMin();
@@ -56,33 +63,8 @@ public class Simple_Parallel {
 		
 		yMin = yMin + antGrid.getyOffset();
 		yMax = yMax + antGrid.getyOffset(); // add the offsets to be compatible with 0 centered array
-		
-		// since the Parallel SumArray class only takes a 1d array,
-		// to keep things simple I will build a 1d array from the query first
-		// and then time and run the parallel processing on that.. 
-		int[] oneD_Arr = new int[((xMax-xMin)+1)*((yMax-yMin)+1)];
-		
-		int i = 0;
-		try{
-			for (int x = xMin; x <= xMax; x++){
-				for (int y = yMin; y <= yMax; y++){
-					oneD_Arr[i] = aGrid[x][y];
-					i++;
-					if (i > 22500){
-						System.err.println("eish");
-					}
-				}
-			}
-		} catch(ArrayIndexOutOfBoundsException ex){
-			System.out.println("Your query is out of bounds!! please try again.. ");
-			// return the results as 0. 
-			return new Results(0,0);
-		}
-		
-		Timer t2Timer = new Timer();
-		t2Timer.start_ns_timer();
-		
-		int dpCount = fjPool.invoke(new SumArray(oneD_Arr, 0, oneD_Arr.length));
+				
+		int dpCount = fjPool.invoke(new SumArray(aGrid, xMin, xMax, yMin, yMax));
 		
 		int numdp = antGrid.getCount();
 		double dpPercentage = ((dpCount*100)/numdp);
