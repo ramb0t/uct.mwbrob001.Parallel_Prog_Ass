@@ -64,6 +64,7 @@ public class QueryHandler {
 	private Query getQueryKeyboard(){
 		
 		//variables needed in this function
+		@SuppressWarnings("resource")
 		Scanner input = new Scanner(System.in);
 		String line = "";
 		String[] lineArr;

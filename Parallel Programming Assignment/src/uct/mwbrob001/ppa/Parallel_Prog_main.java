@@ -32,6 +32,7 @@ public class Parallel_Prog_main {
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		
 		
