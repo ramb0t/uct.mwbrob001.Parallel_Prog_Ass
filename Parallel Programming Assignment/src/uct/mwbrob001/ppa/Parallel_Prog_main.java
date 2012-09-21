@@ -43,6 +43,10 @@ public class Parallel_Prog_main {
 		System.out.println("binning data, this could take a while... ");
 		antGrid = preProcess.doBinning();
 		
+		// build the test 3 grid!
+		// create an instance of the class
+	    Smarter_Sequential test3 = new Smarter_Sequential(antGrid);
+		
 		// prints the grid out if debugging is enabled ...
 		if(DEBUG && DEBUG_LEVEL == 1){   
 			antGrid.print();
@@ -92,10 +96,28 @@ public class Parallel_Prog_main {
 			
 			Results t2Result = test2.runTest(antGrid, query);
 			System.out.println("The results are: " + t2Result.toString());
+			
+
+			// Version3: Smarter and Sequential
+			//*********************************************************************
+			
+			// run the test
+			System.out.println();
+			System.out.println("************************************************");
+			System.out.println("Running test 3, Smarter and Sequential...");
+			System.out.println();
+			
+			
+			Results t3Result = test3.runTest(antGrid, query);
+			System.out.println("The results are: " + t3Result.toString());
+			
+			
 
 			// gets the next query
 			query = QH.getQuery();
 		} // end query loop
+		
+		test3.close(); // saves mem
 		
 		
 		

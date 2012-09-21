@@ -84,8 +84,7 @@ public class Simple_Sequential {
 		// finish the timer
 		tTimer.finish_ns_timer();
 		
-		int numdp = antGrid.getCount();
-		double dpPercentage = ((dpCount*100)/numdp);
+		double dpPercentage = ((double)(dpCount * 100))/(double)(antGrid.getCount());
 				
 		return new Results(dpCount, dpPercentage); 
 		

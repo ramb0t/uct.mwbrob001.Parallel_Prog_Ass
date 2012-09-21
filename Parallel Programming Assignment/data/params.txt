@@ -1,7 +1,3 @@
-5
+1
 ant1.txt
-animal1.txt
-ant3.txt
-ant4.txt
-huge.txt
 1 1

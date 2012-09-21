@@ -66,8 +66,7 @@ public class Simple_Parallel {
 				
 		int dpCount = fjPool.invoke(new SumArray(aGrid, xMin, xMax, yMin, yMax));
 		
-		int numdp = antGrid.getCount();
-		double dpPercentage = ((dpCount*100)/numdp);
+		double dpPercentage = ((double)(dpCount * 100))/(double)(antGrid.getCount());
 	
 		t2Timer.finish_ns_timer();
 		
