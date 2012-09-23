@@ -178,7 +178,7 @@ public class PreProcess {
 			    	} catch(Exception ex){ // catching all errors
 			    		System.out.println("File parsing Error!! " +
 			    				"Something went wrong when trying to parse the data," +
-			    				" please check your file format");
+			    				" please check your file format and fix the faulty line...");
 			    		System.out.println("In file: " + path);
 						System.out.println(ex.toString());
 			            System.exit(1);
@@ -294,7 +294,6 @@ public class PreProcess {
 			    	double xbin = (x/k);
 			    	double ybin = (y/m);
 			    	
-			        // next test if it falls exactly between two (or 4) bins.
 			    	
 			    	tempAntGrid[xOffset + (int) Math.ceil(xbin)][yOffset + (int) Math.ceil(ybin)]++;
 			    	count++;

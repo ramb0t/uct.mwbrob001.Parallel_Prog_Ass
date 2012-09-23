@@ -24,22 +24,26 @@ public class Smarter_Sequential {
 		int[][] aGrid = antGrid.getAntArr();
 		
 		// init the new grid
-		v3Grid = new int[aGrid.length][aGrid[0].length];
+		// needs to be bigger on each side by 1? 
+		v3Grid = new int[aGrid.length+1][aGrid[0].length+1];
 		
 		// build the new grid
-		for (int x = 0; x < aGrid.length; x++){
-			for (int y = aGrid[x].length-1 ; y >= 0; y--){ // start top left
-				if (x > 0 & y < aGrid[x].length-1){ // niether first row or column
-					v3Grid[x][y] = aGrid[x][y] + v3Grid[x-1][y] + v3Grid[x][y+1] - v3Grid[x-1][y+1];
+		// random 1's offset the grid by 1 xD 
+		// this is do so the array is 'surrounded' by zero's on 
+		// allowing the algorithm to process queries 'on the edges' 
+		for (int x = 1; x <= aGrid.length; x++){
+			for (int y = aGrid[x-1].length-1 ; y >= 0; y--){ // start top left
+				if (x > 1 & y < aGrid[x-1].length-1){ // niether first row or column
+					v3Grid[x][y] = aGrid[x-1][y] + v3Grid[x-1][y] + v3Grid[x][y+1] - v3Grid[x-1][y+1];
 					
-				}else if (x > 0 & y == aGrid[x].length-1){ // first row only
-					v3Grid[x][y] = aGrid[x][y] + v3Grid[x-1][y];
+				}else if (x > 1 & y == aGrid[x-1].length-1){ // first row only
+					v3Grid[x][y] = aGrid[x-1][y] + v3Grid[x-1][y];
 					
-				}else if (x==0 & y < aGrid[x].length-1 ){ // first column only
-					v3Grid[x][y] = aGrid[x][y] + v3Grid[x][y+1];
+				}else if (x==1 & y < aGrid[x-1].length-1 ){ // first column only
+					v3Grid[x][y] = aGrid[x-1][y] + v3Grid[x][y+1];
 					
-				}else if(x==0 & y == aGrid[x].length-1 ){ // first column first row 
-					v3Grid[x][y] = aGrid[x][y];
+				}else if(x==1 & y == aGrid[x-1].length-1 ){ // first column first row 
+					v3Grid[x][y] = aGrid[x-1][y];
 				}
 				
 			}
@@ -52,6 +56,18 @@ public class Smarter_Sequential {
 		
 		
 	}
+	
+	public void print(){
+		int count = 0;
+		for (int[] x : v3Grid){
+			System.out.print(count++ + "_ ");
+			for (int y : x){
+				System.out.print(y+" | ");
+			}
+			System.out.println();
+			
+		}
+	}
 
 	
 	public Results runTest(AntGrid antGrid, Query query){
@@ -59,35 +75,12 @@ public class Smarter_Sequential {
 		tTimer.start_ns_timer();
 		
 		// get the query co-ords
-		int xMin = query.getxMin();
-		int xMax = query.getxMax();
+		// +1's should center ?
+		int xMin = query.getqxMin() +1;
+		int xMax = query.getqxMax() +1;
 		
-		int yMin = query.getyMin();
-		int yMax = query.getyMax();
-
-		// get the bin sizes
-		int k 	 = antGrid.getK();
-		int m	 = antGrid.getM();
-		
-    	
-		// find the total number of datapoints in the query grid
-	    // first going to have to find the min & max bin locations
-		
-		// start by getting the corresponding bins of the data.. 
-		// take datapoint / (xRange/k) gives the bin it's in? 
-    	
-    	xMin = (int) Math.ceil((xMin/k));
-    	xMax = (int) Math.floor((xMax/k));
-
-    	yMin = (int) Math.ceil((yMin/m));
-    	yMax = (int) Math.floor((yMax/m));  // only selects the bins within the query rectangle
-		
-		
-		xMin = xMin + antGrid.getxOffset();
-		xMax = xMax + antGrid.getxOffset();
-		
-		yMin = yMin + antGrid.getyOffset();
-		yMax = yMax + antGrid.getyOffset(); // add the offsets to be compatible with 0 centered array
+		int yMin = query.getqyMin() ;
+		int yMax = query.getqyMax() ;
 		
 		// now count the datapoints
 		int dpCount = 0;

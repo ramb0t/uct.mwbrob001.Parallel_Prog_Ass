@@ -24,6 +24,9 @@ public class Parallel_Prog_main {
 	// sets the number of tests to run and average
 	public static final int TEST_NUM = 1000;
 	
+	// sets the number of warmup cycles
+	public static final int DEFINE_WARMUP_CYCLES = 10;
+	
 	
 	// file path defines
 	private static final String params_file = "data/params.txt";  // parameter file path
@@ -47,14 +50,37 @@ public class Parallel_Prog_main {
 		System.out.println("binning data, this could take a while... ");
 		antGrid = preProcess.doBinning();
 		
-		// build the test 3 grid!
-		// create an instance of the class
-	    Smarter_Sequential test3 = new Smarter_Sequential(antGrid);
 		
 		// prints the grid out if debugging is enabled ...
 		if(DEBUG && DEBUG_LEVEL == 1){   
 			antGrid.print();
 		}
+
+		
+		// code warmup xD
+		//*********************************************************************
+		
+		// create an instance of the test class's
+		Simple_Sequential test1 = new Simple_Sequential();
+		Simple_Parallel test2 = new Simple_Parallel();
+		// build the test 3 grid!
+	    Smarter_Sequential test3 = new Smarter_Sequential(antGrid);
+	    
+		// prints the v3grid out if debugging is enabled ...
+		if(DEBUG && DEBUG_LEVEL == 2){   
+			test3.print();
+		}
+		
+	
+		// set to simmer and cover for 10 cycles!
+		Timer t = new Timer();
+		t.start_timer(); //ms timer  ?
+		
+		warmup(test1, test2, test3, antGrid);
+		
+		System.out.println();
+		System.out.println("Warmup time:");
+		t.finish_timer_toSyso();
 		
 		
 		// Get the query/s
@@ -63,6 +89,9 @@ public class Parallel_Prog_main {
 		Query query = QH.getQuery();
 		
 		while(query != null){ // loop until queries done.. 
+			
+			// calc the query ranges to be compatible with our ant array
+			query.calcRanges(antGrid);
 			
 			
 			System.out.println();
@@ -73,9 +102,6 @@ public class Parallel_Prog_main {
 		
 			// Version1: Simple and Sequential
 			//*********************************************************************
-			
-			// create an instance of the class
-			Simple_Sequential test1 = new Simple_Sequential();
 			
 			// run the test
 			System.out.println();
@@ -100,8 +126,6 @@ public class Parallel_Prog_main {
 			// Version2: Simple and Parallel
 			//*********************************************************************
 			
-			// create an instance of the class
-			Simple_Parallel test2 = new Simple_Parallel();
 			
 			// run the test
 			System.out.println();
@@ -123,7 +147,7 @@ public class Parallel_Prog_main {
 			System.out.println("The results are: " + t2Final.toString());
 			System.out.println(t2Final.exTime());
 			
-			double perc = (double)t2Final.getExTime() / (double)t1Final.getExTime();
+			double perc = ((double)t2Final.getExTime() / (double)t1Final.getExTime())*100;
 			System.out.println("percentage " + perc);
 			
 
@@ -137,8 +161,22 @@ public class Parallel_Prog_main {
 			System.out.println();
 			
 			
-			Results t3Result = test3.runTest(antGrid, query);
-			System.out.println("The results are: " + t3Result.toString());
+			Results t3Final = new Results(0,0,0);
+			for (int c = 0; c < TEST_NUM; c++){
+				Results t3Result = test3.runTest(antGrid, query);
+				t3Final.setDpCount(t3Final.getDpCount() + t3Result.getDpCount());
+				t3Final.setDpPercentage(t3Final.getDpPercentage() + t3Result.getDpPercentage());
+				t3Final.setExTime(t3Final.getExTime() + t3Result.getExTime());
+			}
+			// be mean.
+			t3Final.setDpCount(t3Final.getDpCount() / TEST_NUM);
+			t3Final.setDpPercentage(t3Final.getDpPercentage() / TEST_NUM);
+			t3Final.setExTime(t3Final.getExTime() / TEST_NUM);
+			System.out.println("The results are: " + t3Final.toString());
+			System.out.println(t3Final.exTime());
+			
+			double perc3 = ((double)t3Final.getExTime() / (double)t1Final.getExTime())*100;
+			System.out.println("percentage " + perc3);
 			
 			
 
@@ -146,12 +184,36 @@ public class Parallel_Prog_main {
 			query = QH.getQuery();
 		} // end query loop
 		
+		System.out.println();
+		System.out.println("Done!! :D ");
+		
 		test3.close(); // saves mem
 		
 		
 		
 		
 		
+	}
+	
+	
+	/**
+	 * runs the code for each test through a few cycles to get it 'warmed up'
+	 * cycles set by the global constant DEFINE_WARMUP_CYCLES
+	 * @param t1
+	 * @param t2
+	 * @param t3
+	 */
+	public static void warmup(Simple_Sequential t1, Simple_Parallel t2, Smarter_Sequential t3, AntGrid antGrid){
+		// create a 'fake' query
+		Query query = new Query(-100, -100, 100, 100);
+		query.calcRanges(antGrid);
+		
+		// run each test a couple times to let java optimise the code :D 
+		for (int i = 0; i < DEFINE_WARMUP_CYCLES; i++){
+			t1.runTest(antGrid, query);
+			t2.runTest(antGrid, query);
+			t3.runTest(antGrid, query);			
+		}
 	}
 	
 	

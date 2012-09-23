@@ -36,35 +36,12 @@ public class Simple_Sequential {
 		int[][] aGrid = antGrid.getAntArr();
 		
 		// get the query co-ords
-		int xMin = query.getxMin();
-		int xMax = query.getxMax();
+		int xMin = query.getqxMin();
+		int xMax = query.getqxMax();
 		
-		int yMin = query.getyMin();
-		int yMax = query.getyMax();
+		int yMin = query.getqyMin();
+		int yMax = query.getqyMax();
 
-		// get the bin sizes
-		int k 	 = antGrid.getK();
-		int m	 = antGrid.getM();
-		
-    	
-		// find the total number of datapoints in the query grid
-	    // first going to have to find the min & max bin locations
-		
-		// start by getting the corresponding bins of the data.. 
-		// take datapoint / (xRange/k) gives the bin it's in? 
-    	
-    	xMin = (int) Math.ceil((xMin/k));
-    	xMax = (int) Math.floor((xMax/k));
-
-    	yMin = (int) Math.ceil((yMin/m));
-    	yMax = (int) Math.floor((yMax/m));  // only selects the bins within the query rectangle
-		
-		
-		xMin = xMin + antGrid.getxOffset();
-		xMax = xMax + antGrid.getxOffset();
-		
-		yMin = yMin + antGrid.getyOffset();
-		yMax = yMax + antGrid.getyOffset(); // add the offsets to be compatible with 0 centered array
 		
 		// now count the datapoints
 		int dpCount = 0;
@@ -76,7 +53,7 @@ public class Simple_Sequential {
 				}
 			}
 		} catch(ArrayIndexOutOfBoundsException ex){
-			System.out.println("Your query is out of bounds!! please try again.. ");
+			System.out.println("Something went wrong!!, might be array bounds.. please try again.. ");
 			// return the results as 0. 
 			return new Results(0,0,0);
 		}

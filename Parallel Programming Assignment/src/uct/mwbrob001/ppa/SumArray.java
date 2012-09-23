@@ -10,7 +10,7 @@ public class SumArray extends RecursiveTask<Integer> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	static int SEQUENTIAL_CUTOFF = 10; // point at which the algorithm switches to sequential 
+	static int SEQUENTIAL_CUTOFF = 33; // point at which the algorithm switches to sequential 
 	
 	// stores the array and the bounds for the current thread
     int xlo, ylo; 

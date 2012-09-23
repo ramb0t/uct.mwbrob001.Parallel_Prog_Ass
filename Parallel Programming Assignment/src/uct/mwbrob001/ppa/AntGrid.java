@@ -69,7 +69,18 @@ public class AntGrid {
 	}
 	
 	
+	
 	// getters and setters:
+	// for array lengths
+	public int getXLength(){
+		return antArr.length;
+	}
+	
+	public int getYLength(){
+		// assuming all heights are the same.. 
+		return antArr[0].length;
+	}
+	
 	// for count
 	public int getCount() {
 		return count;
