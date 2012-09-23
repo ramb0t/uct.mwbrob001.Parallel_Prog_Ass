@@ -194,7 +194,7 @@ public class PreProcess {
 	    	
 	    	if(DEBUG){ // displays the time the code took to execute
 	    		System.out.println("Corners: " + minX + ", " + maxX + ", " + minY + ", " + maxY );
-	    		execTime.finish_timer();
+	    		execTime.finish_timer_toSyso();
 	    	}
 	    	
 	    } catch (IOException e) {
@@ -319,7 +319,7 @@ public class PreProcess {
 	        
 	        
 	        if(DEBUG){	
-	        	execTime.finish_timer();
+	        	execTime.finish_timer_toSyso();
 	        	System.out.println("To bin the data.");
 	        	} // displays the time the code took to execute
 	        

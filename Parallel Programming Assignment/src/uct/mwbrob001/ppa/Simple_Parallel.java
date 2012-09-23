@@ -23,15 +23,13 @@ public class Simple_Parallel {
 	}
 	
 	public Results runTest(AntGrid antGrid, Query query){
-		
+		// start timing
+		Timer t2Timer = new Timer();
+		t2Timer.start_ns_timer();
 		
 		
 		// fetch the ant grid
 		int[][] aGrid = antGrid.getAntArr();
-		
-
-		Timer t2Timer = new Timer();
-		t2Timer.start_ns_timer();
 
 		
 		// get the query co-ords
@@ -66,11 +64,11 @@ public class Simple_Parallel {
 				
 		int dpCount = fjPool.invoke(new SumArray(aGrid, xMin, xMax, yMin, yMax));
 		
+		// calculate the percentage
 		double dpPercentage = ((double)(dpCount * 100))/(double)(antGrid.getCount());
-	
-		t2Timer.finish_ns_timer();
 		
-		return new Results(dpCount, dpPercentage);
+		// return the results and the compute time.
+		return new Results(dpCount, dpPercentage, t2Timer.finish_ns_timer());
 	}
 	
 }

@@ -21,6 +21,10 @@ public class Parallel_Prog_main {
 	public static final String QUERY_SOURCE = "FILE"; 
 	
 	
+	// sets the number of tests to run and average
+	public static final int TEST_NUM = 1000;
+	
+	
 	// file path defines
 	private static final String params_file = "data/params.txt";  // parameter file path
 	public static final String QUERY_FILE = "data/queries.txt";  // queries file path
@@ -79,8 +83,19 @@ public class Parallel_Prog_main {
 			System.out.println("Running test 1, Simple and Sequential...");
 			System.out.println();
 			
-			Results t1Result = test1.runTest(antGrid, query);
-			System.out.println("The results are: " + t1Result.toString());
+			Results t1Final = new Results(0,0,0);
+			for (int c = 0; c < TEST_NUM; c++){
+				Results t1Result = test1.runTest(antGrid, query);
+				t1Final.setDpCount(t1Final.getDpCount() + t1Result.getDpCount());
+				t1Final.setDpPercentage(t1Final.getDpPercentage() + t1Result.getDpPercentage());
+				t1Final.setExTime(t1Final.getExTime() + t1Result.getExTime());
+			}
+			// be mean.
+			t1Final.setDpCount(t1Final.getDpCount() / TEST_NUM);
+			t1Final.setDpPercentage(t1Final.getDpPercentage() / TEST_NUM);
+			t1Final.setExTime(t1Final.getExTime() / TEST_NUM);
+			System.out.println("The results are: " + t1Final.toString());
+			System.out.println(t1Final.exTime());
 			
 			// Version2: Simple and Parallel
 			//*********************************************************************
@@ -94,8 +109,22 @@ public class Parallel_Prog_main {
 			System.out.println("Running test 2, Simple and Parallel...");
 			System.out.println();
 			
-			Results t2Result = test2.runTest(antGrid, query);
-			System.out.println("The results are: " + t2Result.toString());
+			Results t2Final = new Results(0,0,0);
+			for (int c = 0; c < TEST_NUM; c++){
+				Results t2Result = test2.runTest(antGrid, query);
+				t2Final.setDpCount(t2Final.getDpCount() + t2Result.getDpCount());
+				t2Final.setDpPercentage(t2Final.getDpPercentage() + t2Result.getDpPercentage());
+				t2Final.setExTime(t2Final.getExTime() + t2Result.getExTime());
+			}
+			// be mean.
+			t2Final.setDpCount(t2Final.getDpCount() / TEST_NUM);
+			t2Final.setDpPercentage(t2Final.getDpPercentage() / TEST_NUM);
+			t2Final.setExTime(t2Final.getExTime() / TEST_NUM);
+			System.out.println("The results are: " + t2Final.toString());
+			System.out.println(t2Final.exTime());
+			
+			double perc = (double)t2Final.getExTime() / (double)t1Final.getExTime();
+			System.out.println("percentage " + perc);
 			
 
 			// Version3: Smarter and Sequential

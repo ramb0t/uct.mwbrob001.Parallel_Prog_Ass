@@ -78,15 +78,14 @@ public class Simple_Sequential {
 		} catch(ArrayIndexOutOfBoundsException ex){
 			System.out.println("Your query is out of bounds!! please try again.. ");
 			// return the results as 0. 
-			return new Results(0,0);
+			return new Results(0,0,0);
 		}
 		
-		// finish the timer
-		tTimer.finish_ns_timer();
-		
+		// work out the percentage
 		double dpPercentage = ((double)(dpCount * 100))/(double)(antGrid.getCount());
 				
-		return new Results(dpCount, dpPercentage); 
+		// return the results and finish the timer
+		return new Results(dpCount, dpPercentage, tTimer.finish_ns_timer()); 
 		
 		
 	}

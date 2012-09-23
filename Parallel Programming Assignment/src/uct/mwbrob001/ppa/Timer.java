@@ -21,7 +21,12 @@ public class Timer {
 		nsstartTime = System.nanoTime();
 	}
 	
-	public void finish_ns_timer(){ // completes the nano second timer
+	public long finish_ns_timer(){ // completes the nano second timer
+		nsendTime = System.nanoTime();
+		return (nsendTime - nsstartTime);
+	}
+	
+	public void finish_ns_timer_toSyso(){ // completes the nano second timer
 		nsendTime = System.nanoTime();
 		System.out.println("Execution time: " + (nsendTime - nsstartTime) + "ns");
 	}
@@ -30,7 +35,7 @@ public class Timer {
 		startTime = System.currentTimeMillis(); 
 	}
 	
-	public void finish_timer(){ //completes the timer
+	public void finish_timer_toSyso(){ //completes the timer
 		endTime = System.currentTimeMillis();
 		System.out.println("Execution time: " + (endTime - startTime) + "ms");
 	}

@@ -16,9 +16,11 @@ public class Smarter_Sequential {
 	 * @param antGrid
 	 */
 	public Smarter_Sequential(AntGrid antGrid){
+		// start your engines! 
 		Timer tTimer = new Timer();
 		tTimer.start_ns_timer();
 		
+		// get the grid
 		int[][] aGrid = antGrid.getAntArr();
 		
 		// init the new grid
@@ -45,7 +47,7 @@ public class Smarter_Sequential {
 		
 		System.out.println();
 		System.out.println("v3Grid build time.. ");
-		tTimer.finish_ns_timer();
+		tTimer.finish_ns_timer_toSyso();
 		
 		
 		
@@ -105,11 +107,8 @@ public class Smarter_Sequential {
 		// work the percentage out.. 
 		double dpPercentage = ((double)(dpCount * 100))/(double)(antGrid.getCount());
 		
-		// finish the timer
-		tTimer.finish_ns_timer();
-		
-		// return the result
-		return new Results(dpCount, dpPercentage);
+		// return the result and finish the timer
+		return new Results(dpCount, dpPercentage, tTimer.finish_ns_timer());
 		
 		
 	}

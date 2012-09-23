@@ -7,30 +7,36 @@ package uct.mwbrob001.ppa;
  */
 public class Results {
 	// Two result variables
-	private int dpCount;
+	private long dpCount;
 	private double dpPercentage;
+	private long exTime;
 	
 	/**
 	 * constructor taking the counts
 	 * @param dpCount
 	 * @param dpPercentage
 	 */
-	public Results(int dpCount, double dpPercentage){
+	public Results(long dpCount, double dpPercentage, long exTime){
 		this.setDpCount(dpCount);
 		this.setDpPercentage(dpPercentage);
+		this.setExTime(exTime);
+		
 	}
 	
 	// toString override for printing
 	public String toString(){
 		return dpCount + " " + dpPercentage + "%";
 	}
+	public String exTime(){
+		return exTime + "ns Execution time!";
+	}
 
 	
 	// Getters and Setters.. 
-	public int getDpCount() {
+	public long getDpCount() {
 		return dpCount;
 	}
-	public void setDpCount(int dpCount) {
+	public void setDpCount(long dpCount) {
 		this.dpCount = dpCount;
 	}
 
@@ -39,6 +45,14 @@ public class Results {
 	}
 	public void setDpPercentage(double dpPercentage) {
 		this.dpPercentage = dpPercentage;
+	}
+
+	public long getExTime() {
+		return exTime;
+	}
+
+	public void setExTime(long exTime) {
+		this.exTime = exTime;
 	}
 	
 
