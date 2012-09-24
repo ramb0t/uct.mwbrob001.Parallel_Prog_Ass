@@ -1,4 +1,13 @@
-// TODO comments
+/* File: QueryHandler.java
+ * CSC2002S Java Parallel assignment
+ * Author: MWBROB001
+ * Date : September 2012
+ * 
+ * Description:
+ *  Responsible for getting queries from the keyboard or file
+ *  parsing them correctly and returning query objects.
+ * 
+ */
 package uct.mwbrob001.ppa;
 
 import static uct.mwbrob001.ppa.Parallel_Prog_main.QUERY_FILE;

@@ -1,3 +1,12 @@
+/* File: Query.java
+ * CSC2002S Java Parallel assignment
+ * Author: MWBROB001
+ * Date : September 2012
+ * 
+ * Description:
+ *  Data object for holding query ranges, associated variables and check cases
+ * 
+ */
 package uct.mwbrob001.ppa;
 
 // Query type to make things cleaner.. 

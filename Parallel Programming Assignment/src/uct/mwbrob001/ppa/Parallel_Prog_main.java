@@ -10,11 +10,19 @@
 
 package uct.mwbrob001.ppa;
 
+import java.util.ArrayList;
+
 
 public class Parallel_Prog_main {
 
 	public static final boolean DEBUG = true; // DEBUG define. .
 	public static final int DEBUG_LEVEL = 0; // DEBUG_LEVEL define gives me more debug flexablility . .
+	
+	
+	//*****************************************************************************
+	// NB NB!! set if you want to take queries from keyboard or file
+	///        by uncommenting the corresponding line below
+	//*****************************************************************************
 	
 	// sets where the Query should come from
 	//public static final String QUERY_SOURCE= "KEYBOARD"; 
@@ -22,7 +30,7 @@ public class Parallel_Prog_main {
 	
 	
 	// sets the number of tests to run and average
-	public static final int TEST_NUM = 1000;
+	public static final int TEST_NUM = 100;
 	
 	// sets the number of warmup cycles
 	public static final int DEFINE_WARMUP_CYCLES = 10;
@@ -36,11 +44,18 @@ public class Parallel_Prog_main {
 	private static AntGrid antGrid = null; 
 	
 	
+	
+	
 	/**
 	 * @param args
 	 */
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
+		
+		
+		// stores sets of results and prints them at the end as csv's 
+		// for easy import into excel etc.
+		ArrayList<Results[]> testResults = new ArrayList<Results[]>(); 
 		
 		
 		// Create an instance of the PreProcess class, and process the params file
@@ -123,6 +138,10 @@ public class Parallel_Prog_main {
 			System.out.println("The results are: " + t1Final.toString());
 			System.out.println(t1Final.exTime());
 			
+			// save for later
+			Results[] testSet = new Results[3];
+			testSet[0] = t1Final;
+			
 			// Version2: Simple and Parallel
 			//*********************************************************************
 			
@@ -149,6 +168,9 @@ public class Parallel_Prog_main {
 			
 			double perc = ((double)t2Final.getExTime() / (double)t1Final.getExTime())*100;
 			System.out.println("percentage " + perc);
+			
+			// save for later
+		    testSet[1] = t2Final;
 			
 
 			// Version3: Smarter and Sequential
@@ -178,11 +200,32 @@ public class Parallel_Prog_main {
 			double perc3 = ((double)t3Final.getExTime() / (double)t1Final.getExTime())*100;
 			System.out.println("percentage " + perc3);
 			
+			// save for later
+			testSet[2] = t3Final;
+			testResults.add(testSet);
 			
 
 			// gets the next query
 			query = QH.getQuery();
 		} // end query loop
+		
+		
+		System.out.println();
+		System.out.println("***************************************************");
+		System.out.println("test results.");
+		
+		// flip all the results so the order is correct
+		ArrayList<Results[]> flipResults = new ArrayList<Results[]>();
+		for(Results[] r : testResults){
+			flipResults.add(r);
+		}
+		// clean up. 
+		testResults.clear();
+		
+		// display the results
+		for(Results[] r : flipResults){
+			System.out.println(r[0].getExTime() + ", " + r[1].getExTime() + ", " + r[2].getExTime());
+		}
 		
 		System.out.println();
 		System.out.println("Done!! :D ");

@@ -1,9 +1,14 @@
+/* File: Timer.java
+ * CSC2002S Java Parallel assignment
+ * Author: MWBROB001
+ * Date : September 2012
+ * 
+ * Description:
+ *  Quick little class to abstract some timing functions.
+ * 
+ */
 package uct.mwbrob001.ppa;
-/*  Timer.java
-	 Simple class to abstract a simple timing algorithm, finishes by printing a string with the elapsed time..  
-	 MWBROB001
-	 16/04/2011
-*/
+
 
 
 public class Timer {

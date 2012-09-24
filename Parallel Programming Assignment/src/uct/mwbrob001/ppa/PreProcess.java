@@ -245,7 +245,7 @@ public class PreProcess {
 	    	int xBloc = (int) Math.ceil((xRange/k));
 	    	int yBloc = (int) Math.ceil((yRange/m));
 	    
-	    	tempAntGrid = new int[xBloc+1][yBloc+1];
+	    	tempAntGrid = new int[xBloc+2][yBloc+2];
 	    	
 	    	// deal with offsets in the case of negative grid values
 	    	if (minX < 0){ // x Offset
@@ -279,7 +279,7 @@ public class PreProcess {
 	    		
 		    	// Split the ant input line up
 		    	lineArr = line.split(multiple_space_delim); 
-		    	
+		    	if (lineArr.length > 3){
 		    	// try parse the input
 		    	try{
 		    		// also not used..
@@ -304,7 +304,10 @@ public class PreProcess {
 		    				"Something went wrong when trying to parse the data," +
 		    				" please check your file format");
 					System.out.println(ex.toString());
+					for(String s : lineArr)
+					System.out.println(s);
 		            System.exit(1);
+		    	}
 		    	}
 		        
 	    	} // end for each

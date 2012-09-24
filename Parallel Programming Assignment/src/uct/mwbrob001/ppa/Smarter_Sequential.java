@@ -1,4 +1,12 @@
-// TODO comments
+/* File: Smarter_Sequential.java
+ * CSC2002S Java Parallel assignment
+ * Author: MWBROB001
+ * Date : September 2012
+ * 
+ * Description:
+ *  Processes queries in O(1) time using some clever maths :P
+ * 
+ */
 package uct.mwbrob001.ppa;
 
 

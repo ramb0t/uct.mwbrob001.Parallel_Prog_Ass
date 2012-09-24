@@ -1,5 +1,12 @@
-// TODO comments.. 
-
+/* File: SumArray.java
+ * CSC2002S Java Parallel assignment
+ * Author: MWBROB001
+ * Date : September 2012
+ * 
+ * Description:
+ *  used in conjunction with Simple_Parallel to perform forkjoins
+ * 
+ */
 package uct.mwbrob001.ppa;
 
 import java.util.concurrent.RecursiveTask;
@@ -10,7 +17,7 @@ public class SumArray extends RecursiveTask<Integer> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	static int SEQUENTIAL_CUTOFF = 33; // point at which the algorithm switches to sequential 
+	static int SEQUENTIAL_CUTOFF = 200; // point at which the algorithm switches to sequential 
 	
 	// stores the array and the bounds for the current thread
     int xlo, ylo; 

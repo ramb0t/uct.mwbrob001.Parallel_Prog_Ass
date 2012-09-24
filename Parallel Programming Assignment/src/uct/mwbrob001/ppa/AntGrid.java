@@ -1,3 +1,12 @@
+/* File: AntGrid.java
+ * CSC2002S Java Parallel assignment
+ * Author: MWBROB001
+ * Date : September 2012
+ * 
+ * Description:
+ *  Data object for holding the antGrid and associated variables
+ * 
+ */
 package uct.mwbrob001.ppa;
 
 /**
